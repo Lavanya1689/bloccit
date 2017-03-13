@@ -20,7 +20,7 @@ RSpec.describe User, type: :model do
      end
 
      it "should have correct format for name" do
-        user.name "lavanya tangati"
+        user.name = "lavanya tangati"
         user.save
         expect(user.name).to eq "Lavanya Tangati"
      end
