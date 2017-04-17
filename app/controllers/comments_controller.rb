@@ -3,6 +3,7 @@ class CommentsController < ApplicationController
   before_action :authorize_user, only: [:destroy]
 
   def create
+    @labelable = Post.find(params[:post_id])
     @post = Post.find(params[:post_id])
     comment = @post.comments.new(comment_params)
     comment.user = current_user
