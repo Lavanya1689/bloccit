@@ -3,17 +3,26 @@ class CommentsController < ApplicationController
   before_action :authorize_user, only: [:destroy]
 
   def create
-    @labelable = Post.find(params[:post_id])
-    @post = Post.find(params[:post_id])
-    comment = @post.comments.new(comment_params)
+    if params[:post_id].present?
+      @model = Post.find(params[:post_id])
+      logger.info "CREATING POST"
+    else
+      @model = Topic.find(params[:topic_id])
+      logger.info "CRATING TOPIC"
+    end
+    logger.info "MODEL #{@model.inspect}"
+    comment = @model.comments.build(comment_params)
     comment.user = current_user
-
+    logger.info "============ THE COMMENT IS: #{comment.inspect}"
     if comment.save
       flash[:notice] = "Comment saved successfully"
-      redirect_to [@post.topic, @post]
     else
       flash[:alert] = 'Comment failed to save'
-      redirect_to [@post.topic, @post]
+    end
+    if @model.is_a?(Post)
+      redirect_to [@model.topic, @model]
+    else
+      redirect_to @model
     end
   end
 

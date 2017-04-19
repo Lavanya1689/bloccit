@@ -25,10 +25,12 @@
     <% end %>
     <div>
        <h3>Comments</h3>
-       <%= render @topic.comments %>
+       <% @topic.comments.each do |comment| %>
+         <%= render 'comments/comment', commentable: @topic, comment: comment %>
+       <% end %>
     </div>
     <% if current_user %>
-         <%= render 'comments/form', comment: Comment.new, labelable: @post %>
+         <%= render 'comments/form', comment: Comment.new, labelable: @topic %>
     <%end%>
   </div>
   <div class="col-md-4" >
