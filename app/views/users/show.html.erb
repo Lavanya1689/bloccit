@@ -19,8 +19,36 @@
    </div>
  </div>
 
- <h2>Posts</h2>
- <%= render @user.posts %>
 
- <h2>Comments</h2>
- <%= render @user.comments %>
+ <% if posts_comments_exists?(@user) %>
+   <h2>Posts</h2>
+   <%= render @user.posts %>
+
+   <h2>Favorite Posts</h2>
+     <% @user.posts.each do |p| %>
+        <% if p.favorites.size > 0 %>
+          <table>
+            <tr>
+              <td>
+                <% avatar_url = @user.avatar_url(30) %>
+                <% if avatar_url %>
+                  <div class="media-left">
+                    <%= image_tag avatar_url, class: 'media-object' %>
+                  </div>
+                <% end %>
+              </td>&nbsp;&nbsp;
+              <td><%= link_to p.title, topic_post_path(p.topic, p) %></td>&nbsp;&nbsp;
+              <td>Number of Votes -  <%= @user.votes.size %></td>&nbsp;&nbsp;
+              <td>Number of comments -  <%= @user.comments.size %></td>&nbsp;&nbsp;
+            </tr>
+          </table>
+        <%end%>
+     <% end %>
+
+   <h2>Comments</h2>
+   <%= render @user.comments %>
+<% else %>
+    <h2>
+        <%= @user.name %> has not submitted any posts yet.
+    </h2>
+ <%end%>
